@@ -1,43 +1,4 @@
-# DEV VERSION
-# eShop 
-
-- Repository: eShop
-- Type of Challenge:  `Consolidation`
-- Duration: `10 days`
-- Deadline: `30/09/24`
-- Team challenge :  `solo`
-
-## Mission objectives 
-During this project you will work alone. Choose the mission that corresponds to your orientation (front or back)
-
-### Front end 
-
-Recreated a new front with a framework from the template provided
-
-### Back end 
-
-Created the backend adapted to the template provided
-
-
-
-## The Mission
-Freshshop is your new customer. They specialize in organic food and biodegradable bikes. Their Saint-Gilles store is so profitable that they opened a second one. To celebrate, they want to launch an e-commerce website at the same time.
-
-## Front end
-
-The owner of Freshshop selected a template from the web. He is not free of rights and is starting to be quite old. From there, implement the model in a framework and modify it to make it more interesting and suitable for OOP.
-
-### Must-have features
-
-- The project is developed with a framework
-- All features must be present (work stops at the front)
-- The design of the site is improved
-- The site has a responsive version
-
-### Nice-to-have features
-
-- All images/videos are optimized for the web
-
+# LEARN VERSION
 ## Back end 
 
 Freshshop already owns the frontend part of the project. You must now implement the back-end.
@@ -92,20 +53,37 @@ Do the job like a fullstack
 6. Create the ReadMe
 7. Start coding 
 
-## Evaluation criterias
-| Criteria       | Indicator                                                    | Yes/No |
-| -------------- | ------------------------------------------------------------ | ------ |
-| 1. Is complete | The student has realized all must-have features and one Nice-to-have feature |        |
-|                | The rules of the MVC model and the OOP are respected         |        |
-|                | The repo is clean                                            |        |
-|                | The readme is clean                                          |        |
-| 2. Is Correct  | The student has realized 3 of must-have features and one Nice-to-have feature |        |
-|                | The rules of the MVC model and the OOP are respected         |        |
-|                | The repo is clean                                            |        |
-|                | The readme is clean                                          |        |
+---
 
-## Courage
+## Possible Roadmap
 
-Shoot for the moon, even if you miss, you’ll land among the stars. *Oscar Wilde*
+- Vite ??
 
-![](https://media.giphy.com/media/l4KhQo2MESJkc6QbS/giphy.gif)
+- Node.js
+  - Description: A JavaScript runtime built on Chrome's V8 JavaScript engine, allowing you to build scalable network applications.
+  - Learning Resources:
+    - Node.js [Documentation](https://nodejs.org/docs/latest/api/documentation.html)
+    - Online courses on platforms like Udemy or Coursera.
+- Express.js
+  - Description: A web application framework for Node.js, designed for building web applications and APIs.
+  - Learning Resources:
+    - Express.js [Documentation](https://expressjs.com/)
+    - Tutorials on YouTube or freeCodeCamp.
+- MongoDB
+  - Description: A NoSQL database that uses a document-oriented data model, perfect for handling large volumes of unstructured data.
+  - Learning Resources:
+    - [MongoDB University](https://learn.mongodb.com/)
+    - Courses available on platforms like Codecademy and Coursera.
+
+## Notes
+
+### Node js
+
+[Source](https://www.youtube.com/watch?v=32M1al-Y6Ag)
+
+**Install**
+
+Use the official [website](https://nodejs.org/en) and get the latest and more stable version.
+
+Check version if already installed with terminal: `node --version`
+
