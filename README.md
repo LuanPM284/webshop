@@ -83,13 +83,13 @@ Do the job like a fullstack
 	- ...
 
 ### Steps
-1. Download the folder containing the template (clone the repo)
-2. Analyze the different template files
-3. Create the repository
-4. Study the request (What & Why ?)
-5. Identify technical challenges (How ?)
-6. Create the ReadMe
-7. Start coding 
+1. [x] Download the folder containing the template (clone the repo)
+2. [x] Analyze the different template files
+3. [x] Create the repository
+4. [ ] Study the request (What & Why ?)
+5. [ ] Identify technical challenges (How ?)
+6. [x] Create the ReadMe
+7. [ ] Start coding 
 
 ## Evaluation criterias
 | Criteria       | Indicator                                                    | Yes/No |
