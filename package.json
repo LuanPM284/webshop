@@ -1,0 +1,16 @@
+{
+  "name": "webshop",
+  "version": "1.0.0",
+  "description": "Freshshop already owns the frontend part of the project. You must now implement the back-end.",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon --env-file=.env server2.js"
+  },
+  "keywords": [],
+  "author": "LuanPM ",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
