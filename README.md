@@ -670,6 +670,7 @@ server.listen(PORT, () => {
 })
 ```
 **Fyle System modules**
+
 [Documentation](https://nodejs.org/docs/latest/api/fs.html)
 
 There are several ways to mess with the file system, here we will see read,write and append.
@@ -755,7 +756,258 @@ node fsDemo.js
 ```
 **Path module**
 
+[Documentation](https://nodejs.org/api/path.html)
 
+In *pathDemo.js*:
+```JS
+import path, { dirname } from 'path'
+import url from 'url'
+
+const filePath = '.dir1/dir2/text.txt'
+
+// basename() - gives us the file name
+console.log(path.basename(filePath))
+// output: text.txt
+
+// dirname - gives us the file path
+console.log(path.dirname(filePath))
+// output: .dir1/dir2
+
+// extname() - gives us the file extenteion
+console.log(path.extname(filePath))
+
+// ouput: .txt
+
+// parse() - gives us object with all the information
+console.log(path.parse(filePath))
+// output:
+// {
+// root: '',
+// dir: '.dir1/dir2',
+// base: 'text.txt',
+// ext: '.txt',
+// name: 'text'
+// }
+
+
+// if standart JavaScript we have access to __filename and __dirname
+// buth without we need to create our own, using the url module
+
+const __filename = url.fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+console.log(__filename, __dirname)
+// output:
+// D:\Code\BeCode\webshop\pathDemo.js
+// D:\Code\BeCode\webshop
+
+// join() - linux: user / brad windows: user \ brad
+// join corrects the path or constructs one
+const filePath2 = path.join(__dirname, 'dir1', 'dir2', 'test.txt')
+console.log(filePath2)
+// output: D:\Code\BeCode\webshop\dir1\dir2\test.txt
+
+// resolve() - same idea as join but with absolute paths
+const filePath3 = path.resolve(__dirname, 'dir1', 'dir2', 'test.txt')
+console.log(filePath3)
+// output: D:\Code\BeCode\webshop\dir1\dir2\test.txt
+```
+**OS modules**
+[Documentation](https://nodejs.org/api/os.html)
+
+Gives us information about out system.
+
+In *osDemo.js*:
+```JS
+import os from 'os'
+
+// useInfo()
+console.log(os.userInfo())
+// output:
+// {
+//     uid: -1,
+//     gid: -1,
+//     username: 'MSI MSI',
+//     homedir: 'C:\\Users\\MSI MSI',
+//     shell: null
+// }
+
+console.log(os.userInfo().username)
+// output: MSI MSI
+
+// totalmem() - memory in bytes
+console.log(os.totalmem())
+// output: 17096101888
+
+// freemen()
+console.log(os.freemem())
+// output: 8157605888
+
+//cpus() - gives an array for every core of system
+console.log(os.cpus())
+// output:
+// [
+//     {
+//       model: 'Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz',
+//       speed: 2808,
+//       times: {
+//         user: 40670640,
+//         nice: 0,
+//         sys: 34102828,
+//         idle: 395507187,
+//         irq: 5373234
+//       }
+//     },
+//     {
+//       model: 'Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz',
+//       speed: 2808,
+//       times: {
+//         user: 32520843,
+//         nice: 0,
+//         sys: 15613250,
+//         idle: 422146328,
+//         irq: 785171
+//       }
+//     },
+//     {
+//       model: 'Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz',
+//       speed: 2808,
+//       times: {
+//         user: 51632500,
+//         nice: 0,
+//         sys: 24173640,
+//         idle: 394474296,
+//         irq: 468312
+//       }
+//     },
+//     {
+//       model: 'Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz',
+//       speed: 2808,
+//       times: {
+//         user: 37487031,
+//         nice: 0,
+//         sys: 15165578,
+//         idle: 417627812,
+//         irq: 237890
+//       }
+//     },
+//     {
+//       model: 'Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz',
+//       speed: 2808,
+//       times: {
+//         user: 41357000,
+//         nice: 0,
+//         sys: 22082140,
+//         idle: 406841281,
+//         irq: 505468
+//       }
+//     },
+//     {
+//       model: 'Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz',
+//       speed: 2808,
+//       times: {
+//         user: 30923437,
+//         nice: 0,
+//         sys: 14237250,
+//         idle: 425119734,
+//         irq: 316625
+//       }
+//     },
+//     {
+//       model: 'Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz',
+//       speed: 2808,
+//       times: {
+//         user: 40147484,
+//         nice: 0,
+//         sys: 18875437,
+//         idle: 411257515,
+//         irq: 421093
+//       }
+//     },
+//     {
+//       model: 'Intel(R) Core(TM) i7-7700HQ CPU @ 2.80GHz',
+//       speed: 2808,
+//       times: {
+//         user: 40071093,
+//         nice: 0,
+//         sys: 17332312,
+//         idle: 412877031,
+//         irq: 292203
+//       }
+//     }
+//   ]
+```
+**URL modules**
+
+[Documentation](https://nodejs.org/api/url.html)
+
+In *urlDemo.js*
+```JS
+import url from 'url'
+
+const urlString = 'https://www.goole.com/search?q=hello+world'
+
+// URL Object
+const urlObj = new URL(urlString)
+
+console.log(urlObj)
+// output:
+// URL {
+//     href: 'https://www.goole.com/search?q=hello+world',
+//     origin: 'https://www.goole.com',
+//     protocol: 'https:',
+//     username: '',
+//     password: '',
+//     host: 'www.goole.com',
+//     hostname: 'www.goole.com',
+//     port: '',
+//     pathname: '/search',
+//     search: '?q=hello+world',
+//     searchParams: URLSearchParams { 'q' => 'hello world' },
+//     hash: ''
+//   }
+
+// format() - takes an object and makes it back into a string
+console.log(url.format(urlObj))
+// output: https://www.goole.com/search?q=hello+world
+
+// import.meta.url - file URL -a special variable
+console.log(import.meta.url)
+// output: file:///D:/Code/BeCode/webshop/urlDemo.js
+// the file protocol and than te path
+
+// fileURMToPath() - convert to a regular path
+console.log(url.fileURLToPath(import.meta.url))
+// output: D:\Code\BeCode\webshop\urlDemo.js
+
+// we can also extract specific parts of the object, here the querry for the search
+console.log(urlObj.search)
+// output: ?q=hello+world
+
+const params = new URLSearchParams(urlObj.search)
+console.log(params)
+// output: URLSearchParams { 'q' => 'hello world' }
+
+// if I want just the values, we use a get() method
+console.log(params.get('q'))
+// output: hello world
+
+// adding to the object
+params.append('limit', '5')
+console.log(params)
+// output: URLSearchParams { 'q' => 'hello world', 'limit' => '5' }
+
+// deleting from object
+params.delete('limit')
+console.log(params)
+// output: URLSearchParams { 'q' => 'hello world' }
+```
+**Crypto module**
+
+[Documentation](https://nodejs.org/api/crypto.html)
+
+
+```JS
+```
 ```JS
 ```
 ```JS
