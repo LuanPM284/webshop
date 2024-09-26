@@ -467,17 +467,295 @@ const server = http.createServer(async (req, res) => {
 
 We start by creating a new file *serve2.js* in orde for all to work properly, change the `script`, in *package.json* where it says *server.js* to *server2.js*.
 
-We import `CreateServer` from `http`
+```JS
+// we import `CreateServer` from `http`
+import { createServer } from 'http'
+// we cann upon the .env file
+const PORT = process.env.PORT
+//create a simple JSON file
+const users = [
+    { id: 1, name: 'John Doe' },
+    { id: 2, name: 'Jane Doe' },
+    { id: 3, name: 'Jim Doe' }
+]
+
+// create a server, 
+const server = createServer((req, res) => {
+    if (req.url === '/api/users' && req.method === 'GET') {
+        res.setHeader('Content-type', 'application/json')
+        res.write(JSON.stringify(users))
+        res.end() // not forget or no work
+    } else {
+        res.setHeader('Content-type', 'application/json')
+        res.statusCode = 404 // a convention
+        res.write(JSON.stringify({ message: 'Route not Found' }))
+        res.end()
+    }
+})
+
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+})
+```
+Imagine we can to be able to call a single user from our API, in that case we will need to create a condition and specify the type of path. With Node is not as easy as with Express
+
+```JS
+// /\/api\/users\/([0-9+])/ ; this to get ./api/users/1
+else if (req.url.match(/\/api\/users\/([0-9+])/) && req.method === 'GET') {
+    res.setHeader('Content-type', 'application/json')
+    res.write(JSON.stringify({ id: 1, name: 'John Doe' }))
+    res.end()
+}
+```
+Now if we want something more organized and an error message for an user not found.
+```JS
+else if (req.url.match(/\/api\/users\/([0-9+])/) && req.method === 'GET') {
+    // we slit the third
+    const id = req.url.split('/')[3]
+    // use function find that gets a callback and return a true if exists
+    const user = users.find((user) => user.id === parseInt(id))
+    if (user) {
+        res.setHeader('Content-type', 'application/json')
+        res.write(JSON.stringify(user))
+        res.end()
+    } else {
+        res.setHeader('Content-type', 'application/json')
+        res.statusCode = 404
+        res.write(JSON.stringify({ message: 'User not Found' })) // use not found
+        res.end()
+    }
+}
+// ./api/users/1 ok
+// ./api/users/2 ok
+// ./api/users/100 user not found
+```
+
+**Midleware**
+
+Modules/functions that have access to the `req` and `res` objects. Change `req`,`res`.
+
+Used to clean code or avoid repetitions.
+
+This example we have a `logger()` that displays on the console/terminal the method and the path everytime a page is called.
 
 
 ```JS
+import { createServer } from 'http'
+
+const PORT = process.env.PORT
+const users = [
+    { id: 1, name: 'John Doe' },
+    { id: 2, name: 'Jane Doe' },
+    { id: 3, name: 'Jim Doe' }
+]
+
+// Logger midleware
+const logger = (req, res, next) => {
+    console.log(`${req.method} ${req.url}`)
+    next() // we need to call next
+}
+
+const server = createServer((req, res) => {
+    logger(req, res, () => {
+        if (req.url === '/api/users' && req.method === 'GET') {
+            res.setHeader('Content-type', 'application/json')
+            res.write(JSON.stringify(users))
+            res.end()
+        } else if (req.url.match(/\/api\/users\/([0-9+])/) && req.method === 'GET') {
+            const id = req.url.split('/')[3]
+            const user = users.find((user) => user.id === parseInt(id))
+            res.setHeader('Content-type', 'application/json')
+            if (user) {
+                res.write(JSON.stringify(user))
+            } else {
+                res.statusCode = 404
+                res.write(JSON.stringify({ message: 'User not Found' }))
+            }
+            res.end()
+        } else {
+            res.setHeader('Content-type', 'application/json')
+            res.statusCode = 404
+            res.write(JSON.stringify({ message: 'Route not Found' }))
+            res.end()
+        }
+    })
+})
+
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+})
 ```
+
+Using Handlers we can simplify the routing and avoid mistakes by creating functions.
 ```JS
+import { createServer } from 'http'
+
+const PORT = process.env.PORT || 8080 // Use 8080 as a fallback
+const users = [
+    { id: 1, name: 'John Doe' },
+    { id: 2, name: 'Jane Doe' },
+    { id: 3, name: 'Jim Doe' }
+]
+
+// Logger middleware
+const logger = (req, res, next) => {
+    console.log(`${req.method} ${req.url}`)
+    next()
+}
+
+// JSON middleware
+const jsonMiddleware = (req, res, next) => {
+    res.setHeader('Content-Type', 'application/json')
+    next()
+}
+
+// Route handler for GET /api/users
+const getUsersHandler = (req, res) => {
+    res.end(JSON.stringify(users))
+}
+
+// Route handler for GET /api/users/:id
+const getUserByIdHandler = (req, res) => {
+    const id = req.url.split('/')[3]
+    const user = users.find((user) => user.id === parseInt(id))
+    if (user) {
+        res.end(JSON.stringify(user))
+    } else {
+        res.statusCode = 404
+        res.end(JSON.stringify({ message: 'User not Found' }))
+    }
+}
+
+// Route handler for POST /api/users
+const createUserHandler = (req, res) => {
+    let body = ''
+    // Listen for data (the envent is called data)
+    req.on('data', (chunk) => {
+        body += chunk.toString()
+    })
+    req.on('end', () => {
+        const newUser = JSON.parse(body)
+        users.push(newUser)
+        res.statusCode = 201 // susseceful 
+        res.end(JSON.stringify(newUser))
+    })
+}
+
+// Not found handler
+const notFoundHandler = (req, res) => {
+    res.statusCode = 404
+    res.end(JSON.stringify({ message: 'Route not Found' }))
+}
+
+// a somewhat router/switch
+
+const server = createServer((req, res) => {
+    logger(req, res, () => {
+        jsonMiddleware(req, res, () => {
+            if (req.url === '/api/users' && req.method === 'GET') {
+                getUsersHandler(req, res)
+            } else if (req.url.match(/^\/api\/users\/([0-9]+)$/) && req.method === 'GET') {
+                getUserByIdHandler(req, res)
+            } else if (req.url === '/api/users' && req.method === 'POST') {
+                createUserHandler(req, res)
+            } else {
+                notFoundHandler(req, res)
+            }
+        })
+    })
+})
+
+server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+})
 ```
+**Fyle System modules**
+[Documentation](https://nodejs.org/docs/latest/api/fs.html)
+
+There are several ways to mess with the file system, here we will see read,write and append.
+
+For reading:
+
+In *fsDemo.js*:
 ```JS
+// for the read
+import fs from 'fs'
+
+// readFile() - callback, Asynchronous version
+// takes a path, incoding , callback
+fs.readFile('./test.txt', 'utf8', (err, data) => {
+    if (err) throw err;
+    console.log(data)
+})
+
+// readFileSunc() - Synchronous version (not recommended for big files, since it blocks all else)
+const data = fs.readFileSync('./test.txt', 'utf8')
+console.log(data)
+
 ```
+For the promises version of reading, the async/await wil be used for the write and append:
+
 ```JS
+import fs from 'fs/promises'
+
+// readFile() - Promise .then()
+fs.readFile('./test.txt', 'utf8')
+    .then((data) => console.log(data))
+    .catch((err) => console.log(err))
+
+// readFile() - async/await
+const readFile = async () => {
+    try {
+        const data = await fs.readFile('./test.txt', 'utf8')
+        console.log(data)
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+readFile() // call upon the function
 ```
+For writting and appendding:
+```JS
+// writeFile() - takes path and what to write
+// it overwrites into the files
+const writeFile = async () => {
+    try {
+        await fs.writeFile('./test.txt', 'Hello, I am writting to this file')
+        console.log('File Written to ')
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// appendFile()
+const appendFile = async () => {
+    try {
+        await fs.appendFile('./test.txt', '\nThis is appended text')
+        console.log('File appended to')
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+writeFile()
+appendFile()
+readFile()
+
+// output: 
+// File appended to
+// File Written to
+// Hello, I am writting to this file
+// This is appended text
+```
+On terminal: 
+```sh
+node fsDemo.js
+
+```
+**Path module**
+
+
 ```JS
 ```
 ```JS
