@@ -79,9 +79,9 @@ Do the job like a fullstack
 
 ### Node js
 
-[Source](https://www.youtube.com/watch?v=32M1al-Y6Ag)
-
-**Install**
+[Source](https://www.youtube.com/watch?v=32M1al-Y6Ag) used for this set of notes and learning. A video by Traversy Media name "Node.js Crash Course"
+--
+#### Install
 
 Use the official [website](https://nodejs.org/en) and get the latest and more stable version.
 
@@ -91,20 +91,25 @@ With a classic Node installation we have a terminal where we can write JavaScrip
 
 We start a project by creating a directory and using our code editor to start.
 
-We need a `package.json` file. We could create one file and name it that, but we also have access to `npm` (Node Package Manager) so we will use that instead.
+We need a *package.json* file. 
+
+We could create one file and name it that, but we also have access to `npm` (Node Package Manager) so we will use that instead.
 
 `npm init`
 - different options will appear, we can interact with them
 
-`npm init -y` // -y will skip the options
+`npm init -y` 
+- -y will skip the options
 
-Next we need to create a entry point. We will use `index.js`, once we write inside it we can run it, using Node installed in the machine, by typing `node index.js` or ´node fileName´ no need for the `.js`.
+Next we need to create a entry point. 
+
+We will use *index.js*, once we write inside it we can run it, using Node installed in the machine, by typing `node index.js` or ´node fileName´ no need for the `.js`.
 
 A detail to pay attention to, is since this is not running on a browser de `window` type variable gives us an error.
 
-We insteal have a `global` type object that will store several variables. Also have a `process` object
-
-**Modules**
+We instead have a `global` type object that will store several variables. Also have a `process` object
+---
+#### Modules
 
 An example:
 ```JS
@@ -116,14 +121,14 @@ function generateRandomNumber() {
 }
 ```
 The are two ways to interact with modules:
-- Common JS
+1. Common JS
 
-As an example we created `utils.js`:
+As an example we created *utils.js*:
 ```JS
 // this goes inside the same file we want to export from
 module.exports = generateRandomNumber
 ```
-Inside `index.js`:
+Inside *index.js*:
 ```JS
 // a variable receives the required file
 const generateRandomNumber = require('./utils') // we give the placement
@@ -132,7 +137,9 @@ console.log(`Random Number: ${generateRandomNumber()}`)
 // terminal: node index
 // output: Random Number: 85
 ```
-We can use other functions, objects, arrays or other types of data from other files. Have in mind that if more than one function is being exported it is better to create an object.
+We can use other functions, objects, arrays or other types of data from other files. 
+
+Have in mind that if more than one function is being exported it is better to create an object.
 
 ```js
 function celciusToF(celcius) {
@@ -144,7 +151,7 @@ module.exports = {
     celciusToF,
 }
 ```
-And to use we will use:
+And we will use:
 ```js
 const { generateRandomNumber, celciusToF } = require('./utils')
 
@@ -152,13 +159,15 @@ const { generateRandomNumber, celciusToF } = require('./utils')
 console.log(`Celcius to fahrenhiet : ${celciusToF(0)}`)
 // ouput: Celcius to fahrenhiet : 0
 ```
-- IS modules (Import/Export syntax)
-To start we need to add into `package.json`, just under "main" the following:
+\
+2. IS modules (Import/Export syntax)
+
+To start we need to add into *package.json*, just under `"main"` the following:
 
 ```JSON
   "type": "module",
 ```
-As example we created ´postController.js´:
+As example we created *postController.js*:
 
 ```JS
 // a post controller on a website
@@ -183,7 +192,7 @@ export default getPosts
 // we can also export other objects outside of default
 export const getPostsLength = () => posts.length
 ```
-Inside `index.js`:
+Inside *index.js* :
 
 ```JS
 // we use import, and the module we want, with the correct path including the .js
@@ -203,9 +212,9 @@ console.log(`Post Length: ${getPostsLength()}`)
 // output: Post Length: 2
 ```
 ---
-**For webtype application**
+#### For webtype application
 
-We start by creating a `server.js` file.
+We start by creating a *server.js* file.
 
 Normally the following would be done via a framework like *Express* but this video will shows how to work without them.
 
@@ -1005,7 +1014,234 @@ console.log(params)
 
 [Documentation](https://nodejs.org/api/crypto.html)
 
+In *cryptoDemo.js*:
+```JS
+import crypto from 'crypto'
 
+// createHash() - a way to scrumble information
+const hash = crypto.createHash('sha256')
+hash.update('password1234')
+// console.log(hash.digest('hex'))
+// output: b9c950640e1b3740e98acb93e669c65766f6670dd1609ba91ff41052ba48c6f3
+
+// randomBytes()
+// create high cryptograph type data - always different, could be used for user id ofr example
+crypto.randomBytes(16, (err, buf) => {
+    if (err) throw err
+    // console.log(buf.toString('hex'))
+})
+// output:
+// a21164da5783ecb9b359792a0cd44dbb
+// de2e76263d68c38475ce4e28ae742069
+// b01e1d9a468bf44b84b6b1ae4e883da4
+// ...
+
+// incrypt text to cipher text and vise-versa
+//createCipheriv() & createDecipheriv() // 3 things are needed
+const algorithm = 'aes-256-cbc'
+const key = crypto.randomBytes(32) // random string of 32
+const iv = crypto.randomBytes(16) // random string of 16
+
+const cipher = crypto.createCipheriv(algorithm, key, iv)
+let encrypted = cipher.update('Hello, this is a secret meassage', 'utf8', 'hex') // update(what I want to incrypt, incoding type, hex)
+encrypted += cipher.final('hex')
+console.log(encrypted)
+// output: 78fd4683561235c709e9dc82ae32a4c2d7e91c1072d3e8d3829c62f43d5401d7810d7c91c6b0bd8374aacf121b667f63
+
+const decipher = crypto.createDecipheriv(algorithm, key, iv)
+let decrypted = decipher.update(encrypted, 'hex', 'utf8') // update(what I want to incrypt, incoding type, hex)
+decrypted += decipher.final('utf8')
+console.log(decrypted)
+// output:
+//c221f2a862ba17661083a30f87fea918903cbc1fd70903cbd3b475de7d68ff990f6717b8436bcb973e495a9bbbfd54aa
+// Hello, this is a secret meassage
+```
+**Event modules**
+
+[Documentation](https://nodejs.org/api/events.html)
+
+```JS
+import { EventEmitter } from 'events'
+
+// good for runtime applications
+
+const myEmitter = new EventEmitter()
+
+function greetHandler() {
+    console.log('Hello, world')
+}
+
+function goodbyeHandler() {
+    console.log('Goodbye, world')
+}
+
+// Register event listeners
+myEmitter.on('greet', greetHandler)
+myEmitter.on('goodbye', goodbyeHandler)
+
+// Emit events
+myEmitter.emit('greet')
+myEmitter.emit('goodbye')
+//output:
+// Hello, world
+// Goodbye, world
+
+// we can also add arguments
+function greetHandler(name) {
+    console.log('Hello ' + name)
+}
+
+function goodbyeHandler(name) {
+    console.log('Goodbye ' + name)
+}
+
+myEmitter.on('greet', greetHandler)
+myEmitter.on('goodbye', goodbyeHandler)
+
+myEmitter.emit('greet', 'John')
+myEmitter.emit('goodbye', 'John')
+// output:
+// Hello John
+// Goodbye John
+
+// Error handling
+myEmitter.on('error', (err) => {
+    console.log('Error Occured: ', err)
+})
+
+// Simulate error
+myEmitter.emit('error', new Error('Something went wrong'))
+// output:
+// Hello John
+// Goodbye John
+// Error Occured:  Error: Something went wrong
+//     at file:///D:/Code/BeCode/webshop/eventsDemo.js:50:25
+//     at ModuleJob.run (node:internal/modules/esm/module_job:222:25)
+//     at async ModuleLoader.import (node:internal/modules/esm/loader:316:24)
+//     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:123:5)
+```
+**Process module**
+
+[Documentation](https://nodejs.org/api/process.html)
+
+In *processDemo.js*
+```JS
+// this gives us access to an object with many processes, this can allow us to  create CLI and add argv
+// console.log(process)
+
+// argv 
+console.log(process.argv) // the path to node, and the file
+// output:
+// [
+//   'C:\\Program Files\\nodejs\\node.exe',
+//   'D:\\Code\\BeCode\\webshop\\processDemo.js'
+// ]
+
+// we can run the file : node processDemo.js
+// and add to the argv, being it an array we can call to it and execute CLI commands
+
+// example
+// node processDemo.js -s
+// output:
+// [
+//   'C:\\Program Files\\nodejs\\node.exe',
+//   'D:\\Code\\BeCode\\webshop\\processDemo.js',
+//   '-s'
+// ]
+
+// access to the array
+console.log(process.argv[2])
+// output: -s
+
+// I can than say, if(process.argv == -s) then ...
+
+
+// process.env
+// console.log(process.env)
+// output: a lot!!!, of stuff from the system
+
+console.log(process.env.USERDOMAIN)
+// output: LUAN-PC
+
+
+// pid - id of node.js process
+console.log(process.pid)
+// output: 14924
+
+// cwd - current working directory
+console.log(process.cwd())
+// output: D:\Code\BeCode\webshop
+
+// title
+console.log(process.title)
+
+// memoryUsage()
+console.log(process.memoryUsage())
+// output:
+// {
+//     rss: 24743936,
+//     heapTotal: 4935680,
+//     heapUsed: 4438088,
+//     external: 1711220,
+//     arrayBuffers: 12298
+// }
+
+// uptime() - time from runnin the command to the script executing
+console.log(process.uptime())
+
+// exit() - 0 for a success and ends the process and 1 to error
+process.on('exit', (code) => { // this should fire off when I run process.exit(0)
+    console.log(`About to exit with code: ${code}`)
+})
+
+process.exit(0)
+// output: About to exit with code: 0
+```
+---
+### Express js
+[Documentation](https://expressjs.com/)
+
+Create a directory for the project.
+
+Intall express with the terminal by typing:
+
+`npm i express`
+
+! Remember to exclude the */node_modules* from the git repository by adding it to *.gitignore* and the *.env*.
+
+#### Basic Server
+
+Create the file *server.js*. Or another type of name, since it will depend on the kind of project it is, an app for example would be better to have *app.js*.
+
+A simple example, and firt commands using Express and comparing to Node.
+
+In *server.js*:
+
+```JS
+const express = require('express')
+
+// Initialize express - app is used as a convention
+const app = express()
+
+
+// Creating a simple route, we decide the method to respond to GET , POTS, etc
+app.get('/', (req, res) => { // the callback function uses to objects that has many methods we can use
+    res.send("Hello, world") // contrary to Node we don't need to precise the content-type or module, and we can already write HTML, or JSON stringify.
+    // we can add JSON type data that it will recognize and show
+    // res.send('<h1>Hello, H1</h1>')
+
+    // res.send({ name: 'Bob' })
+})
+
+// Create a local server
+app.listen(8000, () => console.log('Server is running on port 8000'))
+// output: Server is running on port 9000
+```
+
+We still have a problem that the server needs to be reset for every change that is made. To solve the issue we can use the following:
+
+```JS
+```
 ```JS
 ```
 ```JS
